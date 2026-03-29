@@ -1,5 +1,44 @@
-# Firebase Studio
+# Chroma Tap | Hyper Casual Rhythm Game
 
-This is a NextJS starter in Firebase Studio.
+This is a NextJS rhythm game built in Firebase Studio, optimized for Yandex Games.
 
-To get started, take a look at src/app/page.tsx.
+## Getting Started
+
+To run the development server:
+```bash
+npm run dev
+```
+
+## How to push to GitHub
+
+1. **Initialize Git**:
+   ```bash
+   git init
+   ```
+
+2. **Add Files**:
+   ```bash
+   git add .
+   ```
+
+3. **Commit Changes**:
+   ```bash
+   git commit -m "Initial commit: Chroma Tap Game"
+   ```
+
+4. **Create a Repository on GitHub**:
+   Go to [github.com/new](https://github.com/new) and create a new repository.
+
+5. **Link and Push**:
+   Replace `<username>` and `<repo-name>` with your details:
+   ```bash
+   git remote add origin https://github.com/<username>/<repo-name>.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+## Building for Static Hosting
+```bash
+npm run build
+```
+The static export will be located in the `out` directory.

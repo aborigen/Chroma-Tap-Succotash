@@ -28,9 +28,33 @@ const ChromaTap = () => {
   const [currentSpeed, setCurrentSpeed] = useState(INITIAL_SPEED);
   const [angle, setAngle] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [ysdk, setYsdk] = useState<any>(null);
 
   const requestRef = useRef<number>(null);
   const lastTimeRef = useRef<number>(null);
+
+  // Yandex SDK Initialization
+  useEffect(() => {
+    const initYandexSDK = async () => {
+      try {
+        if (typeof window !== 'undefined' && (window as any).YaGames) {
+          const sdk = await (window as any).YaGames.init();
+          setYsdk(sdk);
+          console.log('Yandex Games SDK initialized successfully');
+          
+          // Optionally get player data if authorized
+          sdk.getPlayer().then((player: any) => {
+             console.log('Player loaded:', player.getName());
+          }).catch(() => {
+             console.log('Player not authorized');
+          });
+        }
+      } catch (error) {
+        console.error('Failed to initialize Yandex SDK:', error);
+      }
+    };
+    initYandexSDK();
+  }, []);
 
   const startGame = () => {
     setScore(0);
@@ -45,8 +69,18 @@ const ChromaTap = () => {
     setStatus('gameover');
     if (score > highScore) {
       setHighScore(score);
+      
+      // If YSDK is initialized, we could report the leaderboard score here
+      if (ysdk) {
+        ysdk.getLeaderboards().then((lb: any) => {
+          // This assumes a leaderboard named 'score' is created in the Yandex Console
+          // lb.setLeaderboardScore('score', score);
+        }).catch((err: any) => {
+          console.warn('Leaderboards not available:', err);
+        });
+      }
     }
-  }, [score, highScore]);
+  }, [score, highScore, ysdk]);
 
   // Game Loop
   const animate = useCallback((time: number) => {
@@ -79,23 +113,15 @@ const ChromaTap = () => {
   const handleTap = () => {
     if (status !== 'playing') return;
 
-    // Segment size is 360 / COLORS.length
     const segmentSize = 360 / COLORS.length;
-    // Angle 0 is at the top? Let's assume standard math (0 is right, counter-clockwise)
-    // Actually our GameCanvas will render starting from top (270 deg)
-    // So 0 deg on canvas is top. 
-    // Segment 0 is 0 to 90
-    // Segment 1 is 90 to 180...
     const normalizedAngle = (angle % 360 + 360) % 360;
     const currentSegmentIndex = Math.floor(normalizedAngle / segmentSize);
 
     if (currentSegmentIndex === targetColorIndex) {
-      // Hit!
       setScore(s => s + 1);
       setCurrentSpeed(s => s + SPEED_INCREMENT);
-      setTimeLeft(t => Math.min(t + TIME_BONUS, 20)); // Cap time
+      setTimeLeft(t => Math.min(t + TIME_BONUS, 20));
       
-      // Change target color to a DIFFERENT one
       let nextIndex;
       do {
         nextIndex = Math.floor(Math.random() * COLORS.length);

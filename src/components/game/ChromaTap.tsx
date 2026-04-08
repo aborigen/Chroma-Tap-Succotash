@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import HUD from './HUD';
 import Screens from './Screens';
 import GameCanvas from './GameCanvas';
+import { playSound } from '@/lib/audio-utils';
 
 const COLORS = [
   '#26ACD9', // Vibrant Blue
@@ -42,7 +43,6 @@ const ChromaTap = () => {
           setYsdk(sdk);
           console.log('Yandex Games SDK initialized successfully');
           
-          // Optionally get player data if authorized
           sdk.getPlayer().then((player: any) => {
              console.log('Player loaded:', player.getName());
           }).catch(() => {
@@ -57,6 +57,7 @@ const ChromaTap = () => {
   }, []);
 
   const startGame = () => {
+    playSound('start');
     setScore(0);
     setTimeLeft(INITIAL_TIME);
     setCurrentSpeed(INITIAL_SPEED);
@@ -66,21 +67,22 @@ const ChromaTap = () => {
   };
 
   const gameOver = useCallback(() => {
+    if (status === 'playing') {
+      playSound('fail');
+    }
     setStatus('gameover');
     if (score > highScore) {
       setHighScore(score);
       
-      // If YSDK is initialized, we could report the leaderboard score here
       if (ysdk) {
         ysdk.getLeaderboards().then((lb: any) => {
-          // This assumes a leaderboard named 'score' is created in the Yandex Console
           // lb.setLeaderboardScore('score', score);
         }).catch((err: any) => {
           console.warn('Leaderboards not available:', err);
         });
       }
     }
-  }, [score, highScore, ysdk]);
+  }, [score, highScore, ysdk, status]);
 
   // Game Loop
   const animate = useCallback((time: number) => {
@@ -118,6 +120,7 @@ const ChromaTap = () => {
     const currentSegmentIndex = Math.floor(normalizedAngle / segmentSize);
 
     if (currentSegmentIndex === targetColorIndex) {
+      playSound('success');
       setScore(s => s + 1);
       setCurrentSpeed(s => s + SPEED_INCREMENT);
       setTimeLeft(t => Math.min(t + TIME_BONUS, 20));

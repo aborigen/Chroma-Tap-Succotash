@@ -16,6 +16,10 @@ npm run release
 ```
 This will generate `release.zip` in your root folder.
 
+## Git Concepts
+- **Fast-Forward (FF)**: When merging, Git simply moves the branch pointer forward instead of creating a "Merge Commit". This happens if the main branch hasn't changed since you started your work.
+- **Merge Commit**: A special commit that has two parents, created when two branches have diverged and are joined back together.
+
 ## How to push to GitHub
 
 1. **Initialize Git**:

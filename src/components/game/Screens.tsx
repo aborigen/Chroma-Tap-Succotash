@@ -5,6 +5,7 @@ import { Play, RotateCcw, Award, ImageIcon, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GameStatus } from './ChromaTap';
 import { generateGameIcon } from '@/ai/flows/generate-icon-flow';
+import { TranslationStrings } from '@/lib/translations';
 import {
   Dialog,
   DialogContent,
@@ -18,9 +19,10 @@ interface ScreensProps {
   onStart: () => void;
   score: number;
   highScore: number;
+  t: TranslationStrings;
 }
 
-const Screens = ({ status, onStart, score, highScore }: ScreensProps) => {
+const Screens = ({ status, onStart, score, highScore, t }: ScreensProps) => {
   const [generating, setGenerating] = useState(false);
   const [generatedIcon, setGeneratedIcon] = useState<string | null>(null);
 
@@ -45,9 +47,9 @@ const Screens = ({ status, onStart, score, highScore }: ScreensProps) => {
           <div className="space-y-6">
             <div className="space-y-2">
               <h1 className="text-5xl font-black tracking-tighter text-foreground italic">
-                CHROMA <span className="text-primary underline">TAP</span>
+                {t.title} <span className="text-primary underline">{t.subtitle}</span>
               </h1>
-              <p className="text-muted-foreground text-sm font-medium">Match the dot with the background color.</p>
+              <p className="text-muted-foreground text-sm font-medium">{t.description}</p>
             </div>
             <div className="space-y-3">
               <Button 
@@ -55,18 +57,18 @@ const Screens = ({ status, onStart, score, highScore }: ScreensProps) => {
                 className="w-full h-16 text-xl font-bold rounded-2xl shadow-xl hover:scale-105 transition-transform"
                 onClick={onStart}
               >
-                <Play className="mr-2 fill-current" /> PLAY NOW
+                <Play className="mr-2 fill-current" /> {t.playNow}
               </Button>
 
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="outline" className="w-full rounded-xl opacity-70 hover:opacity-100">
-                    <ImageIcon className="mr-2 h-4 w-4" /> Generate Icon Idea
+                    <ImageIcon className="mr-2 h-4 w-4" /> {t.generateIcon}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
-                    <DialogTitle>AI Icon Generator</DialogTitle>
+                    <DialogTitle>{t.aiTitle}</DialogTitle>
                   </DialogHeader>
                   <div className="flex flex-col items-center justify-center space-y-4 p-4">
                     {generatedIcon ? (
@@ -83,10 +85,10 @@ const Screens = ({ status, onStart, score, highScore }: ScreensProps) => {
                       disabled={generating}
                       className="w-full"
                     >
-                      {generating ? "Generating..." : (generatedIcon ? "Generate Another" : "Generate Icon")}
+                      {generating ? t.generating : (generatedIcon ? t.generateAnother : t.generateBtn)}
                     </Button>
                     <p className="text-[10px] text-muted-foreground text-center">
-                      This uses Genkit + Imagen 4 to create a square icon concept based on Chroma Tap's visual identity.
+                      {t.aiHint}
                     </p>
                   </div>
                 </DialogContent>
@@ -96,15 +98,15 @@ const Screens = ({ status, onStart, score, highScore }: ScreensProps) => {
         ) : (
           <div className="space-y-8">
             <div className="space-y-2">
-               <h2 className="text-4xl font-black text-destructive tracking-tight">GAME OVER</h2>
+               <h2 className="text-4xl font-black text-destructive tracking-tight">{t.gameOver}</h2>
                <div className="flex justify-center gap-8 py-4">
                   <div className="flex flex-col">
-                    <span className="text-xs font-bold text-muted-foreground uppercase">Score</span>
+                    <span className="text-xs font-bold text-muted-foreground uppercase">{t.score}</span>
                     <span className="text-3xl font-black">{score}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1 justify-center">
-                      <Award size={14} className="text-primary" /> Best
+                      <Award size={14} className="text-primary" /> {t.best}
                     </span>
                     <span className="text-3xl font-black text-primary">{highScore}</span>
                   </div>
@@ -116,7 +118,7 @@ const Screens = ({ status, onStart, score, highScore }: ScreensProps) => {
               className="w-full h-16 text-xl font-bold rounded-2xl shadow-xl hover:scale-105 transition-transform"
               onClick={onStart}
             >
-              <RotateCcw className="mr-2" /> TRY AGAIN
+              <RotateCcw className="mr-2" /> {t.tryAgain}
             </Button>
           </div>
         )}

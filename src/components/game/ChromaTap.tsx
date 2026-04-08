@@ -6,6 +6,7 @@ import HUD from './HUD';
 import Screens from './Screens';
 import GameCanvas from './GameCanvas';
 import { playSound } from '@/lib/audio-utils';
+import { translations, Language } from '@/lib/translations';
 
 const COLORS = [
   '#26ACD9', // Vibrant Blue
@@ -30,6 +31,7 @@ const ChromaTap = () => {
   const [angle, setAngle] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [ysdk, setYsdk] = useState<any>(null);
+  const [lang, setLang] = useState<Language>('en');
 
   const requestRef = useRef<number>(null);
   const lastTimeRef = useRef<number>(null);
@@ -41,10 +43,15 @@ const ChromaTap = () => {
         if (typeof window !== 'undefined' && (window as any).YaGames) {
           const sdk = await (window as any).YaGames.init();
           setYsdk(sdk);
-          console.log('Yandex Games SDK initialized successfully');
           
+          // Detect Language
+          const userLang = sdk.environment.i18n.lang;
+          if (userLang === 'ru') {
+            setLang('ru');
+          }
+
           sdk.getPlayer().then((player: any) => {
-             console.log('Player loaded:', player.getName());
+             console.log('Player loaded');
           }).catch(() => {
              console.log('Player not authorized');
           });
@@ -55,6 +62,8 @@ const ChromaTap = () => {
     };
     initYandexSDK();
   }, []);
+
+  const t = translations[lang];
 
   const startGame = () => {
     playSound('start');
@@ -148,6 +157,7 @@ const ChromaTap = () => {
         timeLeft={timeLeft} 
         targetColor={COLORS[targetColorIndex]}
         isInitial={status === 'idle'}
+        t={t}
       />
 
       <div className="flex-1 flex items-center justify-center w-full">
@@ -164,10 +174,11 @@ const ChromaTap = () => {
         onStart={startGame} 
         score={score} 
         highScore={highScore}
+        t={t}
       />
 
       <div className="text-muted-foreground text-xs uppercase tracking-widest font-bold py-2 opacity-50">
-        Tap when colors match
+        {t.tapHint}
       </div>
     </Card>
   );

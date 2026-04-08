@@ -3,15 +3,17 @@
 import React from 'react';
 import { Timer, Trophy } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { TranslationStrings } from '@/lib/translations';
 
 interface HUDProps {
   score: number;
   timeLeft: number;
   targetColor: string;
   isInitial: boolean;
+  t: TranslationStrings;
 }
 
-const HUD = ({ score, timeLeft, targetColor, isInitial }: HUDProps) => {
+const HUD = ({ score, timeLeft, targetColor, isInitial, t }: HUDProps) => {
   const timePercentage = (timeLeft / 20) * 100;
 
   return (
@@ -19,7 +21,7 @@ const HUD = ({ score, timeLeft, targetColor, isInitial }: HUDProps) => {
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col">
           <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-            <Trophy size={14} className="text-primary" /> Score
+            <Trophy size={14} className="text-primary" /> {t.score}
           </span>
           <span className="text-4xl font-black text-foreground">{score}</span>
         </div>
@@ -29,14 +31,14 @@ const HUD = ({ score, timeLeft, targetColor, isInitial }: HUDProps) => {
             className="w-8 h-8 rounded-full border-4 border-white shadow-lg transition-colors duration-500"
             style={{ backgroundColor: targetColor }}
           />
-          <span className="text-[10px] font-bold text-muted-foreground uppercase mt-1">Target Color</span>
+          <span className="text-[10px] font-bold text-muted-foreground uppercase mt-1">{t.targetColor}</span>
         </div>
       </div>
 
       <div className="space-y-1.5">
         <div className="flex justify-between items-center px-1">
            <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-             <Timer size={12} /> Time
+             <Timer size={12} /> {t.time}
            </span>
            <span className={`text-[10px] font-mono font-bold ${timeLeft < 3 ? 'text-destructive animate-pulse' : 'text-primary'}`}>
              {timeLeft.toFixed(1)}s

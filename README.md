@@ -9,6 +9,13 @@ To run the development server:
 npm run dev
 ```
 
+## How to build for Yandex Games
+To create a static build and automatically package it into a zip file:
+```bash
+npm run release
+```
+This will generate `release.zip` in your root folder.
+
 ## How to push to GitHub
 
 1. **Initialize Git**:
@@ -37,7 +44,7 @@ npm run dev
    git push -u origin main
    ```
 
-## Building for Static Hosting
+## Building for Static Hosting (Manual)
 ```bash
 npm run build
 ```

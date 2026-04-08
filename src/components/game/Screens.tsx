@@ -1,18 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Play, RotateCcw, Award, ImageIcon, Loader2 } from 'lucide-react';
+import React from 'react';
+import { Play, RotateCcw, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GameStatus } from './ChromaTap';
-import { generateGameIcon } from '@/ai/flows/generate-icon-flow';
 import { TranslationStrings } from '@/lib/translations';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 interface ScreensProps {
   status: GameStatus;
@@ -23,21 +15,6 @@ interface ScreensProps {
 }
 
 const Screens = ({ status, onStart, score, highScore, t }: ScreensProps) => {
-  const [generating, setGenerating] = useState(false);
-  const [generatedIcon, setGeneratedIcon] = useState<string | null>(null);
-
-  const handleGenerateIcon = async () => {
-    setGenerating(true);
-    try {
-      const result = await generateGameIcon();
-      setGeneratedIcon(result.imageUrl);
-    } catch (error) {
-      console.error("Failed to generate icon:", error);
-    } finally {
-      setGenerating(false);
-    }
-  };
-
   if (status === 'playing') return null;
 
   return (
@@ -59,40 +36,6 @@ const Screens = ({ status, onStart, score, highScore, t }: ScreensProps) => {
               >
                 <Play className="mr-2 fill-current" /> {t.playNow}
               </Button>
-
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" className="w-full rounded-xl opacity-70 hover:opacity-100">
-                    <ImageIcon className="mr-2 h-4 w-4" /> {t.generateIcon}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>{t.aiTitle}</DialogTitle>
-                  </DialogHeader>
-                  <div className="flex flex-col items-center justify-center space-y-4 p-4">
-                    {generatedIcon ? (
-                      <div className="relative aspect-square w-64 overflow-hidden rounded-3xl shadow-2xl border-4 border-primary/20">
-                        <img src={generatedIcon} alt="Generated Icon" className="w-full h-full object-cover" />
-                      </div>
-                    ) : (
-                      <div className="aspect-square w-64 bg-muted rounded-3xl flex items-center justify-center border-2 border-dashed border-muted-foreground/30">
-                        {generating ? <Loader2 className="h-10 w-10 animate-spin text-primary" /> : <ImageIcon className="h-10 w-10 text-muted-foreground/50" />}
-                      </div>
-                    )}
-                    <Button 
-                      onClick={handleGenerateIcon} 
-                      disabled={generating}
-                      className="w-full"
-                    >
-                      {generating ? t.generating : (generatedIcon ? t.generateAnother : t.generateBtn)}
-                    </Button>
-                    <p className="text-[10px] text-muted-foreground text-center">
-                      {t.aiHint}
-                    </p>
-                  </div>
-                </DialogContent>
-              </Dialog>
             </div>
           </div>
         ) : (

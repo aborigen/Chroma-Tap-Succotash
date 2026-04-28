@@ -10,7 +10,8 @@ export const translations = {
     best: "Best",
     targetColor: "Target Color",
     time: "Time",
-    tapHint: "Tap when colors match"
+    tapHint: "Tap when colors match",
+    switchLanguage: "RU"
   },
   ru: {
     title: "CHROMA",
@@ -23,7 +24,8 @@ export const translations = {
     best: "Рекорд",
     targetColor: "Цвет цели",
     time: "Время",
-    tapHint: "Нажми, когда цвета совпадут"
+    tapHint: "Нажми, когда цвета совпадут",
+    switchLanguage: "EN"
   }
 };
 

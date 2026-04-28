@@ -65,6 +65,10 @@ const ChromaTap = () => {
 
   const t = translations[lang];
 
+  const toggleLanguage = useCallback(() => {
+    setLang(prev => prev === 'en' ? 'ru' : 'en');
+  }, []);
+
   const startGame = () => {
     playSound('start');
     setScore(0);
@@ -175,6 +179,7 @@ const ChromaTap = () => {
         score={score} 
         highScore={highScore}
         t={t}
+        onToggleLanguage={toggleLanguage}
       />
 
       <div className="text-muted-foreground text-xs uppercase tracking-widest font-bold py-2 opacity-50">

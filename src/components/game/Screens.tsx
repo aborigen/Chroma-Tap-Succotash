@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Play, RotateCcw, Award } from 'lucide-react';
+import { Play, RotateCcw, Award, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GameStatus } from './ChromaTap';
 import { TranslationStrings } from '@/lib/translations';
@@ -12,9 +12,10 @@ interface ScreensProps {
   score: number;
   highScore: number;
   t: TranslationStrings;
+  onToggleLanguage: () => void;
 }
 
-const Screens = ({ status, onStart, score, highScore, t }: ScreensProps) => {
+const Screens = ({ status, onStart, score, highScore, t, onToggleLanguage }: ScreensProps) => {
   if (status === 'playing') return null;
 
   return (
@@ -35,6 +36,18 @@ const Screens = ({ status, onStart, score, highScore, t }: ScreensProps) => {
                 onClick={onStart}
               >
                 <Play className="mr-2 fill-current" /> {t.playNow}
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="mt-4 text-xs font-bold opacity-70 hover:opacity-100"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleLanguage();
+                }}
+              >
+                <Languages className="mr-2 w-4 h-4" /> {t.switchLanguage}
               </Button>
             </div>
           </div>

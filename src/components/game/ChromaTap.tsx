@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -84,16 +85,23 @@ const ChromaTap = () => {
       playSound('fail');
     }
     setStatus('gameover');
+    
+    // Update local high score
     if (score > highScore) {
       setHighScore(score);
-      
-      if (ysdk) {
-        ysdk.getLeaderboards().then((lb: any) => {
-          // lb.setLeaderboardScore('score', score);
-        }).catch((err: any) => {
-          console.warn('Leaderboards not available:', err);
+    }
+
+    // Update Yandex Leaderboard
+    if (ysdk && score > 0) {
+      ysdk.getLeaderboards()
+        .then((lb: any) => {
+          // Set score to the 'score' leaderboard
+          lb.setLeaderboardScore('score', score);
+          console.log('Score sent to Yandex Leaderboard:', score);
+        })
+        .catch((err: any) => {
+          console.warn('Leaderboards not available (check if technical name "score" exists):', err);
         });
-      }
     }
   }, [score, highScore, ysdk, status]);
 

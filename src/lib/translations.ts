@@ -2,6 +2,7 @@ export const translations = {
   en: {
     title: "CHROMA",
     subtitle: "TAP",
+    fullTitle: "Chroma Tap | Hyper Casual Rhythm Game",
     description: "Match the dot with the background color.",
     playNow: "PLAY NOW",
     tryAgain: "TRY AGAIN",
@@ -14,8 +15,9 @@ export const translations = {
     switchLanguage: "RU"
   },
   ru: {
-    title: "CHROMA",
-    subtitle: "TAP",
+    title: "ХРОМА",
+    subtitle: "ТАП",
+    fullTitle: "Хрома Тап | Гиперказуальная ритм-игра",
     description: "Сопоставьте точку с цветом фона.",
     playNow: "ИГРАТЬ",
     tryAgain: "ЕЩЕ РАЗ",

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -36,6 +35,11 @@ const ChromaTap = () => {
 
   const requestRef = useRef<number>(null);
   const lastTimeRef = useRef<number>(null);
+
+  // Update document title when language changes
+  useEffect(() => {
+    document.title = translations[lang].fullTitle;
+  }, [lang]);
 
   // Yandex SDK Initialization
   useEffect(() => {
@@ -95,17 +99,15 @@ const ChromaTap = () => {
     if (ysdk && score > 0) {
       ysdk.getLeaderboards()
         .then((lb: any) => {
-          // Set score to the 'score' leaderboard
           lb.setLeaderboardScore('score', score);
           console.log('Score sent to Yandex Leaderboard:', score);
         })
         .catch((err: any) => {
-          console.warn('Leaderboards not available (check if technical name "score" exists):', err);
+          console.warn('Leaderboards not available:', err);
         });
     }
   }, [score, highScore, ysdk, status]);
 
-  // Game Loop
   const animate = useCallback((time: number) => {
     if (lastTimeRef.current !== undefined) {
       setAngle(prev => (prev + currentSpeed) % 360);
